@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Excel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>🔄 Conversor de Excel</h1>
+            <p class="subtitle">Carga tu archivo Excel y obtén la versión transformada</p>
+            
+            <div class="upload-section">
+                <input type="file" id="fileInput" accept=".xlsx,.xls" hidden>
+                <label for="fileInput" class="upload-label" id="uploadLabel">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">
+                        <span class="upload-title">Seleccionar archivo Excel</span>
+                        <span class="upload-hint">o arrastra y suelta aquí</span>
+                    </div>
+                </label>
+                <div class="file-info" id="fileInfo" style="display: none;">
+                    <span id="fileName"></span>
+                    <button class="remove-btn" id="removeBtn">✕</button>
+                </div>
+            </div>
+
+            <div class="progress-section" id="progressSection" style="display: none;">
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="progress-text" id="progressText">0%</div>
+                <div class="progress-details" id="progressDetails">Procesando...</div>
+            </div>
+
+            <div class="message" id="message" style="display: none;"></div>
+
+            <div class="actions">
+                <button class="btn btn-primary" id="transformBtn" disabled>
+                    Transformar Excel
+                </button>
+                <button class="btn btn-success" id="downloadBtn" style="display: none;">
+                    ⬇️ Descargar Archivo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
