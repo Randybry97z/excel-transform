@@ -46,6 +46,49 @@ h1 {
     margin-bottom: 30px;
 }
 
+.serie-section {
+    margin-bottom: 30px;
+}
+
+.serie-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.serie-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: #1e1e2e;
+    border: 1px solid #3a3a4e;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.serie-input:focus {
+    outline: none;
+    border-color: #6c5ce7;
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+}
+
+.serie-input::placeholder {
+    color: #808090;
+}
+
+.serie-help {
+    margin-top: 8px;
+}
+
+.help-text {
+    font-size: 12px;
+    color: #a0a0b0;
+    font-style: italic;
+}
+
 .upload-label {
     display: flex;
     flex-direction: column;

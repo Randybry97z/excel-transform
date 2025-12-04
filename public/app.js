@@ -10,6 +10,7 @@ const progressBar = document.getElementById('progressBar');
 const progressText = document.getElementById('progressText');
 const progressDetails = document.getElementById('progressDetails');
 const message = document.getElementById('message');
+const serieInput = document.getElementById('serieInput');
 
 let selectedFile = null;
 let sessionId = null;
@@ -50,9 +51,26 @@ removeBtn.addEventListener('click', () => {
     hideMessage();
 });
 
+// Validar serie en tiempo real
+serieInput.addEventListener('input', (e) => {
+    const value = parseInt(e.target.value);
+    if (value && (value < 4 || value > 6)) {
+        e.target.setCustomValidity('El valor debe ser 4, 5 o 6');
+    } else {
+        e.target.setCustomValidity('');
+    }
+});
+
 // Transform button
 transformBtn.addEventListener('click', async () => {
     if (!selectedFile) return;
+
+    // Validar serie
+    const serieValue = parseInt(serieInput.value);
+    if (!serieValue || serieValue < 4 || serieValue > 6) {
+        showMessage('Por favor, ingrese un valor de serie válido (4, 5 o 6)', 'error');
+        return;
+    }
 
     // Reset UI
     transformBtn.disabled = true;
@@ -70,6 +88,7 @@ transformBtn.addEventListener('click', async () => {
     const formData = new FormData();
     formData.append('excelFile', selectedFile);
     formData.append('sessionId', sessionId);
+    formData.append('serie', serieValue.toString());
 
     try {
         // Start progress polling

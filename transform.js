@@ -25,9 +25,10 @@ const HEADERS = [
  * @param {string} inputFilePath - Ruta del archivo Excel de entrada
  * @param {string} outputFilePath - Ruta del archivo Excel de salida
  * @param {Function} progressCallback - Función callback para reportar progreso (current, total)
+ * @param {number} serie - Valor de serie (4=CIELO, 5=NOVA, 6=GREEN)
  * @returns {Promise<void>}
  */
-async function transformExcel(inputFilePath, outputFilePath, progressCallback = null) {
+async function transformExcel(inputFilePath, outputFilePath, progressCallback = null, serie = 6) {
   const wbIn = new Excel.Workbook();
   await wbIn.xlsx.readFile(inputFilePath);
   
@@ -98,7 +99,8 @@ async function transformExcel(inputFilePath, outputFilePath, progressCallback = 
     // Constantes y reglas
     const SOCIEDAD = 3;
     const VISTA = 1;
-    const SERIE = 6;
+    // SERIE viene del parámetro (4=CIELO, 5=NOVA, 6=GREEN)
+    const SERIE = serie;
 
     // fila de salida (contando encabezado)
     const currentOutputRowIndex = sheetOut.rowCount + 1;
@@ -166,10 +168,12 @@ async function transformExcel(inputFilePath, outputFilePath, progressCallback = 
     const CON_IVA_formula = formulaAG;
 
     const ING_CTA = 7060;
-    const ING_SCTA = 4;
+    // ING_SCTA basado en SERIE: 4=2, 5=3, 6=4
+    const ING_SCTA = serie === 4 ? 2 : serie === 5 ? 3 : 4;
     // ING_IMPORTE debe referenciar a AE (BASE1)
     const ING_IMPORTE_formula = formulaAE;
-    const ING_PROMOCION = 85;
+    // ING_PROMOCION basado en ING_SCTA: 2=86, 3=87, 4=85
+    const ING_PROMOCION = ING_SCTA === 2 ? 86 : ING_SCTA === 3 ? 87 : 85;
     const ING_APARTADO = '02';
     const ING_CAPITULO = '01';
     const ING_PARTIDA = '001';
@@ -214,13 +218,14 @@ async function transformExcel(inputFilePath, outputFilePath, progressCallback = 
 // Si se ejecuta directamente desde línea de comandos, mantener compatibilidad
 if (require.main === module) {
   if (process.argv.length < 4) {
-    console.error('Uso: node transform.js input.xlsx output.xlsx');
+    console.error('Uso: node transform.js input.xlsx output.xlsx [serie]');
     process.exit(1);
   }
 
-  const [,, INPUT_FILE, OUTPUT_FILE] = process.argv;
+  const [,, INPUT_FILE, OUTPUT_FILE, SERIE_ARG] = process.argv;
+  const serieValue = SERIE_ARG ? parseInt(SERIE_ARG) : 6;
 
-  transformExcel(INPUT_FILE, OUTPUT_FILE)
+  transformExcel(INPUT_FILE, OUTPUT_FILE, null, serieValue)
     .then(() => {
       console.log(`Archivo generado correctamente: ${OUTPUT_FILE}`);
     })

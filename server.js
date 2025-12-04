@@ -55,6 +55,12 @@ app.post('/api/transform', upload.single('excelFile'), async (req, res) => {
     return res.status(400).json({ error: 'No se proporcionó ningún archivo' });
   }
 
+  // Validar y obtener serie
+  const serie = parseInt(req.body.serie);
+  if (!serie || serie < 4 || serie > 6) {
+    return res.status(400).json({ error: 'El valor de serie debe ser 4, 5 o 6' });
+  }
+
   const inputPath = req.file.path;
   const sessionId = req.body.sessionId || Date.now().toString();
   const outputFileName = `converted_${Date.now()}.xlsx`;
@@ -64,10 +70,10 @@ app.post('/api/transform', upload.single('excelFile'), async (req, res) => {
     // Inicializar progreso
     progressStore.set(sessionId, { current: 0, total: 0, status: 'processing' });
 
-    // Transformar con callback de progreso
+    // Transformar con callback de progreso y serie
     await transformExcel(inputPath, outputPath, (current, total) => {
       progressStore.set(sessionId, { current, total, status: 'processing' });
-    });
+    }, serie);
 
     // Completar progreso
     const progress = progressStore.get(sessionId);
